@@ -2,18 +2,18 @@ const Folder = require("../model/folder");
 module.exports = {
     createFolder: async(req, res)=>{
         try {
-            const { id , name, description } = req.body;
-            console.log("PostData", id, name, description, req.user)
-            if (!(id && name)) {
+            const { _id , name, description } = req.body;
+            console.log("PostData", _id, name, description, req.user)
+            if (!(_id && name)) {
                 return res.status(400).send("Id, name are required");
             }
             
-            const oldFolder = await Folder.findOne({_id:id});
+            const oldFolder = await Folder.findOne({_id:_id});
             if (oldFolder) {
                 return res.status(409).send({error: "Folder Already Exist.",folder: oldFolder});
             }
             const folder = await Folder.create({
-                _id: id,
+                _id: _id,
                 userId: req.user.user_id,
                 name: name,
                 description: description
@@ -25,20 +25,20 @@ module.exports = {
     },
     updateFolder: async(req, res)=>{
         try {
-            const { id , name, description } = req.body;
-            console.log("Update Data", id, name, description, req.user)
-            if (!(id && name)) {
+            const { _id , name, description } = req.body;
+            console.log("Update Data", _id, name, description, req.user)
+            if (!(_id && name)) {
                 return res.status(400).send({ error: "Id, name are required"});
             }
             
-            const folder = await Folder.findOne({_id:id, userId: req.user.user_id});
+            const folder = await Folder.findOne({_id:_id, userId: req.user.user_id});
             if(!folder){
                 return res.status(400).send({error: "Folder doesn't exist.",folder: folder});
             }
             folder.name = name;
             folder.description = description;
             let newValue = {$set: {name: name, description: description}}
-            let result = await Folder.updateOne({_id: id}, newValue);
+            let result = await Folder.updateOne({_id: _id}, newValue);
             res.status(201).json(folder);
         } catch (error) {
             res.status(500).send({error: error});
@@ -46,15 +46,15 @@ module.exports = {
     },
     deleteFolder: async(req, res)=>{
         try {
-            const { id } = req.body;
-            if (!id) {
+            const { _id } = req.body;
+            if (!_id) {
                 return res.status(400).send({error: "Id is required"});
             }
-            const folder = await Folder.findOne({_id:id, userId: req.user.user_id});
+            const folder = await Folder.findOne({_id:_id, userId: req.user.user_id});
             if(!folder){
-                return res.status(400).send({error: "Folder doesn't exist.",folder: folder});
+                return res.status(400).send({error: "Folder doesn't exist."});
             }
-            let result = await Folder.deleteOne({_id: id})
+            let result = await Folder.deleteOne({_id: _id})
             res.status(201).json({success: true});
         } catch (error) {
             res.status(500).send({error: error});

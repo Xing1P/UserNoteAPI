@@ -1,6 +1,7 @@
 Install
 =======
-run ```npm install```
+install nodejs
+and run ```npm install``` in project
 
 Start Dev
 =========
