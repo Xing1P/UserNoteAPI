@@ -11,9 +11,12 @@ app.use(fileUpload());
 
 //API Router
 //User
-const {register, login} = require('./api/UserAPI')
+const {register, login, resetPassword, confirmResetPassword, changePassword} = require('./api/UserAPI')
 app.post('/register', register);
 app.post('/login', login);
+app.post('/reset_password', resetPassword);
+app.post('/confirm_reset_password', confirmResetPassword);
+app.post('/change_password', auth, changePassword);
 
 //Note Folder
 const { createFolder, updateFolder, deleteFolder, getFolder } = require('./api/FolderApi') 
