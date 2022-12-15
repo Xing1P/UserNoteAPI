@@ -3,6 +3,18 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const mongoose = require("mongoose");
 module.exports = {
+    checkEmail: async(req,res)=>{
+      try {
+        const { email } = req.body;
+        if(!email){
+          return res.status(400).send("Email is required");
+        }
+        const oldUser = await User.findOne({ email });
+        return res.status(201).json({email_exist: oldUser!=null});
+      } catch (error) {
+        res.status(500).send({error: error});
+      }
+    },
     register: async(req,res)=>{
         // Our register logic starts here
         try {
